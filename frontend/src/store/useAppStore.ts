@@ -23,6 +23,7 @@ interface StoreState {
 
   shotAssets: Array<any> | undefined;
   setShotAssets: (assets: Array<any> | undefined) => void;
+  updateShotDuration: (index: number, duration: number) => void;
 }
 
 export const useAppStore = create<StoreState>((set) => ({
@@ -45,5 +46,13 @@ export const useAppStore = create<StoreState>((set) => ({
 
   shotAssets: undefined,
   setShotAssets: (assets) => set({ shotAssets: assets }),
+  updateShotDuration: (index, duration) => set((state) => {
+      if (!state.shotAssets) return {};
+      const newAssets = [...state.shotAssets];
+      if (newAssets[index]) {
+          newAssets[index] = { ...newAssets[index], duration_s: duration };
+      }
+      return { shotAssets: newAssets };
+  }),
 }));
 
