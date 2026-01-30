@@ -3,8 +3,8 @@ LLM Orchestrator - LangChain chains for IR parsing and template instantiation
 """
 
 from typing import Dict, Any, List, Optional
-from langchain.schema import HumanMessage, SystemMessage
-from langchain.output_parsers import PydanticOutputParser
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
 
 from src.config.settings import settings

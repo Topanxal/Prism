@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Volume2, Settings, Download, Share2, MessageSquare } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
@@ -6,10 +6,32 @@ export const VideoView = () => {
   const { shotAssets } = useAppStore();
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeShotIndex, setActiveShotIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Use the first generated video if available, or fallback to mock
   const currentVideoUrl = shotAssets && shotAssets.length > 0 ? shotAssets[activeShotIndex].video_url : "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2053&auto=format&fit=crop";
   const isVideo = shotAssets && shotAssets.length > 0;
+
+  useEffect(() => {
+    if (videoRef.current) {
+        if (isPlaying) {
+            videoRef.current.play().catch(e => console.error("Play error:", e));
+        } else {
+            videoRef.current.pause();
+        }
+    }
+  }, [isPlaying, currentVideoUrl]); // React to play state change and video source change
+
+  const handleVideoEnded = () => {
+      // Auto-advance to next shot if available
+      if (shotAssets && activeShotIndex < shotAssets.length - 1) {
+          setActiveShotIndex(prev => prev + 1);
+          // Keep playing state true so next video plays automatically
+      } else {
+          setIsPlaying(false);
+          setActiveShotIndex(0); // Loop back to start or stop
+      }
+  };
 
   return (
     <div className="flex h-full bg-zinc-900 text-white overflow-hidden">
@@ -57,11 +79,14 @@ export const VideoView = () => {
                     <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
                         {isVideo ? (
                             <video 
+                                ref={videoRef}
+                                key={currentVideoUrl} // Key is crucial for React to reload video element on src change
                                 src={currentVideoUrl} 
                                 className="w-full h-full object-contain" 
                                 controls={false}
-                                autoPlay={isPlaying}
-                                loop
+                                // autoPlay={isPlaying} // Handled by useEffect now
+                                onEnded={handleVideoEnded}
+                                // loop={false} // Handle loop manually via state
                             />
                         ) : (
                             <img 

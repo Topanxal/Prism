@@ -17,18 +17,21 @@
 ## 2. 测试链路计划 (Testing Strategy)
 
 ### 阶段一：Mock 模式全链路验证 (Mock Mode Verification)
+*   **状态**: ✅ 已通过 (2026-01-31)
 *   **目标**: 确保在不消耗 Token 的情况下，所有 UI 流程和后端状态流转正常。
 *   **配置**: 确保 `.env` 中 `MOCK_MODE=True`。
-*   **测试用例**:
-    1.  **生成 (Generate)**: 
-        *   输入任意指令。
-        *   预期: 立即返回一个包含 4 个分镜的 Mock 视频（健康早餐主题），状态为 `SUCCEEDED`。
-    2.  **修改 (Revise)**:
-        *   点击 "Revise"，输入任意修改建议。
-        *   预期: 创建一个新的 Job，状态立即为 `SUCCEEDED`。IR 中的 `narration_tone` 会变为 `casual_mock` (如果修改了 narration)。
-    3.  **高清化 (Finalize)**:
-        *   选择分镜点击 "Finalize" (如果 UI 有入口)。
-        *   预期: Job 状态更新，视频分辨率元数据更新为 "1920x1080"。
+*   **测试结果**:
+    1.  **后端服务 (Backend Services)**:
+        *   `Generate`: 成功创建 Job，返回 Job ID。
+        *   `Job Status`: 轮询状态正确流转为 `SUCCEEDED`，Mock 资源（4个分镜）正确返回。
+        *   `Revise`: 成功创建修订 Job，继承父 Job 上下文。
+        *   `Finalize`: 成功触发高清化流程。
+        *   `Health Check`: 服务运行正常。
+    2.  **修复记录**:
+        *   修复了 `langchain.schema` 导入错误 (改为 `langchain_core`)。
+        *   修复了数据库表自动创建逻辑 (现在 `jobs.db` 会在启动时自动初始化)。
+        *   修复了 `logger` 参数传递错误。
+        *   添加了 `scripts/test_integration.py` 自动化测试脚本。
 
 ### 阶段二：真实 API 冒烟测试 (Live Smoke Test)
 *   **配置**: 确保 `.env` 中 `MOCK_MODE=False`。

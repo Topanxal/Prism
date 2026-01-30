@@ -18,11 +18,11 @@ interface StoreState {
   setScript: (script: string) => void;
   appendScript: (chunk: string) => void;
   
-  shotPlan: JobStatusResponse['shot_plan'];
-  setShotPlan: (plan: JobStatusResponse['shot_plan']) => void;
+  shotPlan: Array<any> | undefined; // Simplified for now, or define Shot interface
+  setShotPlan: (plan: Array<any> | undefined) => void;
 
-  shotAssets: JobStatusResponse['shot_assets'];
-  setShotAssets: (assets: JobStatusResponse['shot_assets']) => void;
+  shotAssets: Array<any> | undefined;
+  setShotAssets: (assets: Array<any> | undefined) => void;
 }
 
 export const useAppStore = create<StoreState>((set) => ({

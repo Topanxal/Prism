@@ -26,12 +26,17 @@ export const Sidebar = () => {
                   setAppState('EDITING');
                   addMessage('ai', '视频脚本和分镜生成完毕！请查看右侧工作区。');
                   if (status.script) setScript(status.script);
-                  if (status.shot_plan) setShotPlan(status.shot_plan);
-                  if (status.shot_assets) setShotAssets(status.shot_assets);
+                  
+                  // Handle shot_plan structure
+                  if (status.shot_plan && status.shot_plan.shots) {
+                      setShotPlan(status.shot_plan.shots);
+                  }
+                  
+                  if (status.assets) setShotAssets(status.assets);
               } else if (status.status === 'FAILED') {
                   clearInterval(interval);
                   setAppState('IDLE'); // Or error state
-                  addMessage('ai', `生成失败: ${status.error_details?.message || '未知错误'}`);
+                  addMessage('ai', `生成失败: ${status.error?.message || '未知错误'}`);
               } else if (status.status === 'RUNNING') {
                    // Optional: Update progress or keep 'THINKING'/'GENERATING'
                    if (status.script && appState !== 'GENERATING') {
@@ -47,6 +52,10 @@ export const Sidebar = () => {
 
   const handleSend = async () => {
     if (!input.trim()) return;
+    if (input.trim().length < 2) {
+        addMessage('ai', '请至少输入 2 个字符的描述。');
+        return;
+    }
     const userInput = input;
     addMessage('user', userInput);
     setInput('');

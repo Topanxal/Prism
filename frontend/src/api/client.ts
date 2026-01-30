@@ -32,14 +32,21 @@ export interface JobStatusResponse {
   job_id: string;
   status: 'CREATED' | 'SUBMITTED' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
   script?: string;
-  shot_plan?: Array<{
-    shot_id: number;
-    visual_prompt: string;
-    narration: string;
-    duration: number;
-  }>;
-  shot_assets?: ShotAsset[];
-  error_details?: any;
+  shot_plan?: {
+    shots: Array<{
+      shot_id: number;
+      visual_prompt: string;
+      narration: string;
+      duration: number;
+      // Add other fields if necessary
+    }>
+  };
+  assets?: Array<any>; // Backend returns 'assets'
+  error?: any; // Backend returns 'error'
+  
+  // Legacy fields to maintain compatibility if needed, but better to remove
+  // shot_assets?: ShotAsset[]; 
+  // error_details?: any;
 }
 
 export interface ReviseRequest {
