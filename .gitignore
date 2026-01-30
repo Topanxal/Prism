@@ -14,8 +14,6 @@ __pycache__/
 env/
 venv/
 ENV/
-env.bak/
-venv.bak/
 
 # Database
 *.db
@@ -31,11 +29,12 @@ yarn-error.log*
 .npm/
 .cache/
 
-# Video/Media (Optional, depending on if you want to commit sample videos)
-# *.mp4
-# *.mov
-
-# Specific files
-backend/backend/data/jobs.db
-backend/.env
-backend/backend/.env
+# Backend Data (Ignore generated content but keep structure)
+backend/data/*.db
+backend/data/static/vedios/*
+!backend/data/static/vedios/.gitkeep
+!backend/data/static/vedios/mock_video.mp4
+backend/data/static/audio/*
+!backend/data/static/audio/.gitkeep
+backend/data/static/metadata/*
+!backend/data/static/metadata/.gitkeep

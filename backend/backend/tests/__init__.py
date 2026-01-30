@@ -1,3 +1,0 @@
-"""
-Prism Backend Test Suite
-"""
