@@ -259,11 +259,11 @@ class FeedbackParser:
     ) -> Dict[str, Any]:
         """
         Parse user feedback to identify targeted fields for revision
-
+        
         Args:
             feedback: User's revision feedback
             previous_ir: Original IR from parent job
-
+            
         Returns:
             Dict with targeted_fields and suggested_modifications
         """
@@ -329,3 +329,4 @@ Return a JSON object with:
                 "targeted_fields": ["camera", "narration", "lighting", "emotion", "pacing"],
                 "suggested_modifications": {"feedback": feedback},
             }
+

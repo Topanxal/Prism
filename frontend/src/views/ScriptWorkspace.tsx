@@ -33,7 +33,8 @@ export const ScriptWorkspace = () => {
   };
 
   const handleCardClick = (index: number) => {
-    addMessage('ai', `已选中场景 ${index}，请告诉我您想如何修改？`);
+    // Add revision context to the chat
+    addMessage('ai', `已选中场景 ${index}。如果您对这个分镜的画面或旁白不满意，请直接告诉我您想如何修改，我会帮您更新。`);
   };
 
   const handleUpload = (index: number) => {
